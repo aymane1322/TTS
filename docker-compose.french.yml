@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  french-tts:
+    build:
+      context: .
+      dockerfile: Dockerfile.french-cpu
+    image: french-tts:local
+    volumes:
+      # Your Python script (mounted so you can edit it without rebuilding)
+      - ./generate_french_speech.py:/app/generate_french_speech.py
+
+      # Output folder — generated WAV files appear here on your PC
+      - ./french_audio_output:/app/french_audio_output
+
+      # Voice samples for cloning (put your WAV files here)
+      - ./voice_samples:/app/voice_samples
+
+      # Persistent model cache — models are large (1-3 GB), cache avoids re-downloading
+      - tts_models_cache:/app/models
+
+    environment:
+      - COQUI_TOS_AGREED=1
+
+    # Allow interactive input (for the mode selection prompt)
+    stdin_open: true
+    tty: true
+
+volumes:
+  # Named volume keeps downloaded models between runs
+  tts_models_cache:

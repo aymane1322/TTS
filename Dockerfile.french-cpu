@@ -1,0 +1,42 @@
+# CPU-only Docker image for French TTS generation
+# Uses Python 3.11 (required by Coqui TTS)
+# No NVIDIA GPU needed
+
+FROM python:3.11-slim
+
+# Install system dependencies
+# espeak-ng: phonemizer for many TTS models
+# libsndfile1: audio file read/write
+# ffmpeg: audio format conversion
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    espeak-ng \
+    libsndfile1 \
+    ffmpeg \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory inside the container
+WORKDIR /app
+
+# Install Coqui TTS from PyPI
+# This installs version 0.22.0 with all required ML dependencies
+RUN pip install --no-cache-dir TTS==0.22.0
+
+# Pin transformers to 4.45.2: TTS 0.22.0 requires BeamSearchScorer which was
+# removed from the top-level transformers namespace in v4.46+
+RUN pip install --no-cache-dir transformers==4.45.2
+
+# Apply compatibility patches for current PyTorch and transformers versions:
+#  - stream_generator.py: BeamSearchScorer moved to sub-modules in transformers 4.45+
+#  - utils/io.py: torch.load now defaults to weights_only=True in PyTorch 2.6+
+COPY patch_tts.py /tmp/patch_tts.py
+RUN python /tmp/patch_tts.py && rm /tmp/patch_tts.py
+
+# Accept Coqui TTS Terms of Service automatically (required for XTTS models)
+ENV COQUI_TOS_AGREED=1
+
+# Models are downloaded to /root/.local/share/tts by default
+# We make it a volume-friendly path
+ENV TTS_HOME=/app/models
+
+CMD ["python", "generate_french_speech.py"]
