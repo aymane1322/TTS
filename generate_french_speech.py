@@ -21,10 +21,71 @@ from TTS.api import TTS
 # CONFIGURATION — Edit this section to match your needs
 # =============================================================================
 
+
+#   [0] Claribel Dervla
+#   [1] Daisy Studious
+#   [2] Gracie Wise
+#   [3] Tammie Ema
+#   [4] Alison Dietlinde
+#   [5] Ana Florence
+#   [6] Annmarie Nele
+#   [7] Asya Anara
+#   [8] Brenda Stern
+#   [9] Gitta Nikolina
+#   [10] Henriette Usha
+#   [11] Sofia Hellen
+#   [12] Tammy Grit
+#   [13] Tanja Adelina
+#   [14] Vjollca Johnnie
+#   [15] Andrew Chipper
+#   [16] Badr Odhiambo
+#   [17] Dionisio Schuyler
+#   [18] Royston Min
+#   [19] Viktor Eka
+#   [20] Abrahan Mack
+#   [21] Adde Michal
+#   [22] Baldur Sanjin
+#   [23] Craig Gutsy
+#   [24] Damien Black
+#   [25] Gilberto Mathias
+#   [26] Ilkin Urbano
+#   [27] Kazuhiko Atallah
+#   [28] Ludvig Milivoj
+#   [29] Suad Qasim
+#   [30] Torcull Diarmuid
+#   [31] Viktor Menelaos
+#   [32] Zacharie Aimilios
+#   [33] Nova Hogarth
+#   [34] Maja Ruoho
+#   [35] Uta Obando
+#   [36] Lidiya Szekeres
+#   [37] Chandra MacFarland
+#   [38] Szofi Granger
+#   [39] Camilla Holmström
+#   [40] Lilya Stainthorpe
+#   [41] Zofija Kendrick
+#   [42] Narelle Moon
+#   [43] Barbora MacLean
+#   [44] Alexandra Hisakawa
+#   [45] Alma María
+#   [46] Rosemary Okafor
+#   [47] Ige Behringer
+#   [48] Filip Traverse
+#   [49] Damjan Chapman
+#   [50] Wulf Carlevaro
+#   [51] Aaron Dreschner
+#   [52] Kumar Dahl
+#   [53] Eugenio Mataracı
+#   [54] Ferran Simen
+#   [55] Xavier Hayasaka
+#   [56] Luis Moray
+
 # Your French text to generate
 TEXTES_FRANCAIS = [
-    "Bonjour, je m'appelle Marie et je suis ravie de vous parler aujourd'hui.",
-]
+"La carte affiche les 5 lieux reliés par des flèches animées. Chaque flèche porte une phrase descriptive. Le type de flux n'est jamais écrit : c'est à vous de l'identifier."]
+
+# Speaker index from the list above (0-57). Change this number to switch voice.
+SPEAKER_INDEX = 46  # [23] Craig Gutsy
 
 # Output folder where .wav files will be saved
 OUTPUT_DIR = "french_audio_output"
@@ -138,28 +199,13 @@ def mode_3_builtin_speakers():
     for i, s in enumerate(tts.speakers):
         print(f"  [{i}] {s}")
 
-    print("\nOptions:")
-    print("  - Type a speaker NAME from the list above")
-    print("  - Type a NUMBER (index) from the list above")
-    print("  - Press ENTER to use the first 4 speakers as a demo")
-    choice = input("\nChoose speaker (or ENTER for demo): ").strip()
-
-    if choice == "":
-        selected_speakers = tts.speakers[:4]
-        print(f"Demo: using first 4 speakers: {selected_speakers}")
-    elif choice.isdigit():
-        idx = int(choice)
-        if idx < len(tts.speakers):
-            selected_speakers = [tts.speakers[idx]]
-        else:
-            print(f"Index {idx} out of range, using speaker 0.")
-            selected_speakers = [tts.speakers[0]]
+    idx = SPEAKER_INDEX
+    if idx < len(tts.speakers):
+        selected_speakers = [tts.speakers[idx]]
+        print(f"\nUsing speaker [{idx}]: {tts.speakers[idx]}")
     else:
-        if choice in tts.speakers:
-            selected_speakers = [choice]
-        else:
-            print(f"Speaker '{choice}' not found, using first speaker instead.")
-            selected_speakers = [tts.speakers[0]]
+        print(f"SPEAKER_INDEX {idx} out of range, falling back to speaker 0.")
+        selected_speakers = [tts.speakers[0]]
 
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
@@ -182,34 +228,4 @@ def mode_3_builtin_speakers():
 # MAIN — Choose which mode to run
 # =============================================================================
 if __name__ == "__main__":
-    print("""
-╔══════════════════════════════════════════════════════════╗
-║          French TTS — Coqui TTS (local)                  ║
-║  Generates French speech with multiple voices            ║
-╚══════════════════════════════════════════════════════════╝
-
-Choose a mode:
-  1 — Simple French model (single voice, fastest, no config needed)
-  2 — XTTS v2 with voice cloning (male + female, needs WAV samples)
-  3 — XTTS v2 with built-in speakers (no WAV samples needed)
-""")
-
-    choice = input("Enter mode (1, 2, or 3): ").strip()
-
-    if choice == "1":
-        mode_1_simple_french()
-
-    elif choice == "2":
-        print("\nYou need two WAV files: one male voice, one female voice.")
-        print("Example: voice_homme.wav  /  voice_femme.wav")
-        print("Acceptable: any WAV file with 6-30 seconds of clear speech.\n")
-        male_wav   = input("Path to MALE voice WAV file:   ").strip().strip('"')
-        female_wav = input("Path to FEMALE voice WAV file: ").strip().strip('"')
-        mode_2_voice_cloning(male_wav, female_wav)
-
-    elif choice == "3":
-        mode_3_builtin_speakers()
-
-    else:
-        print("Invalid choice. Running Mode 1 as default...")
-        mode_1_simple_french()
+    mode_3_builtin_speakers()

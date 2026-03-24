@@ -37,8 +37,8 @@ Write-Host "Your WAV files will appear in: french_audio_output\" -ForegroundColo
 Write-Host "Put voice sample WAVs in:       voice_samples\" -ForegroundColor Green
 Write-Host ""
 
-# Run interactively — the script will prompt you to choose a mode
-docker run --rm -it `
+# Run non-interactively — mode and speaker are set in generate_french_speech.py
+docker run --rm `
     -v "${PWD}/generate_french_speech.py:/app/generate_french_speech.py" `
     -v "${PWD}/french_audio_output:/app/french_audio_output" `
     -v "${PWD}/voice_samples:/app/voice_samples" `
