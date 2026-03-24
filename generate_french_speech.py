@@ -82,10 +82,9 @@ from TTS.api import TTS
 
 # Your French text to generate
 TEXTES_FRANCAIS = [
-"La carte affiche les 5 lieux reliés par des flèches animées. Chaque flèche porte une phrase descriptive. Le type de flux n'est jamais écrit : c'est à vous de l'identifier."]
-
-# Speaker index from the list above (0-57). Change this number to switch voice.
-SPEAKER_INDEX = 46  # [23] Craig Gutsy
+"Exactement : services d'enseignement. Et avec plus de 500 salariés… Mais pour Recycl'Tout, regardez bien les seuils de chiffre d'affaires au Maroc…"
+]# Speaker index from the list above (0-57). Change this number to switch voice.
+SPEAKER_INDEX = 22  # [46] Rosemary Okafor
 
 # Output folder where .wav files will be saved
 OUTPUT_DIR = "french_audio_output"
