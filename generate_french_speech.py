@@ -80,6 +80,8 @@ from TTS.api import TTS
 #   [55] Xavier Hayasaka
 #   [56] Luis Moray
 
+#   .\run_french_tts.ps1  to run the script with PowerShell on Windows (after activating your Python environment)
+
 # Your French text to generate
 TEXTES_FRANCAIS = [
 "Exactement : services d'enseignement. Et avec plus de 500 salariés… Mais pour Recycl'Tout, regardez bien les seuils de chiffre d'affaires au Maroc…"
